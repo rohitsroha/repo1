@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<style>
+body{
+  padding: 20px 200px;
+}
+ul {
+  list-style-type: none;
+  border-top:1px solid #f1f1f2;
+  padding: 5px;
+}
+</style>
+<body>
+<script type="text/javascript" src="app.js"></script>
+
+
+<div ng-app="myapp" ng-controller="myCtrl">
+<center><h1>My Sample App<h1>
+
+<input ng-model="search.title" placeholder="Search Post" ng-model-options="{ debounce: 200 }"
+  ng-change="search()" style="width:70%; margin:20px 0;">
+  <button ng-click="addItem()">Search</button>
+  
+  	<form ng-submit="addPost()">
+    <input type="text" ng-model="p_userid" placeholder="User Id">
+    <input type="text" ng-model="p_title" placeholder="Title">
+    <input type="text" ng-model="p_body" placeholder="Body">
+    <input type="submit" value="Add Post">
+    </form>
+	
+  </center>
+  
+  <h3>Posts</h3>
+  
+  <div id="posts">  
+    <ul ng-repeat="post in posts | filter:search | limitTo:20" >
+	<li style="font-weight:bold;">{{post.title | camelCase}}</li>
+	<li>{{post.body | limitTo: 100 }}{{post.body.length > 20 ? '...' : ''}}</li>
+    <li><a href="" ng-click="getComments(post.id); showComments = !showComments">View Comments</a>
+    <a href="" ng-click="commentbox=true">Add Comment</a>
+	
+	<div  style="background:#f1f1f2" id="comments{{post.id}}"  ng-show="showComments">
+	<!-- calling component 'comments' -->
+  <comments ng-repeat="data in comments[post.id] | limitTo:3" data="data"></comments>
+	
+	<ul style="background:#f1f1f2" >
+	<li style="font-weight:bold;">{{c_name[$index+1]}}({{c_email[$index+1]}})</li>
+	<li>{{c_comment[$index+1]}}</li>
+   </ul>
+   
+	</div>
+	
+	
+	
+	
+	<form ng-submit="addComment(post.id)"  ng-show="commentbox">
+    <input type="text" ng-model="c_name[$index+1]" placeholder="Your Name">
+    <input type="text" ng-model="c_email[$index+1]" placeholder="Your Email">
+    <input type="text" ng-model="c_comment[$index+1]" placeholder="Your Comment">
+    <input type="submit" ng-click="commentbox=false; showComments=true" >
+    </form>
+	
+	
+	</li>
+	
+	</ul>
+ </div>
+  
+</div>
+
+
+</body>
+</html>
